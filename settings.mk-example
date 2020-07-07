@@ -14,7 +14,7 @@
 
 # _MACH = linux
 
-# Useful for standard goma libary install location
+#   Useful for standard goma libary install location
 
 ARCH = rhel6_ompi
 
