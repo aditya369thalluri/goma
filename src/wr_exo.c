@@ -637,7 +637,7 @@ wr_result_prelim_exo(struct Results_Description *rd,
     }
       
   /* -------------------- Element Variables -------------------------- */
-  if ( rd->nev > 0 )
+ /* if ( rd->nev > 0 )
     {
       num_vars = rd->nev;
       error = ex_put_variable_param(exo->exoid, EX_ELEM_BLOCK, num_vars);
@@ -659,8 +659,37 @@ wr_result_prelim_exo(struct Results_Description *rd,
          Also malloc the gvec_elem final dim. Easier to do right
          when the truth table is built. */
 
-      create_truth_table(rd, exo, gvec_elem);
-    }
+
+    /*  create_truth_table(rd, exo, gvec_elem);
+    }*/
+
+      num_vars = 1;
+      error = ex_put_variable_param(exo->exoid, EX_ELEM_BLOCK, num_vars);
+      EH(error, "ex_put_variable_param elem block");
+      for ( i=0; i<1; i++)
+        {
+          var_names[i] = "e1";
+#ifdef DEBUG
+          printf("%s: elem var_name[%d] = %s\n", yo, i, var_names[i]);
+#endif
+        }
+#ifdef DEBUG
+      printf("%s: varnames loaded\n", yo);
+#endif
+      error = ex_put_variable_names(exo->exoid, EX_ELEM_BLOCK, num_vars, var_names);
+      EH(error, "ex_put_variable_names elem block");
+      /*
+      double *elem_vals = malloc(exo->num_elems*sizeof(double));
+      for(i=0;i<exo->num_elems;i++)
+      {
+          elem_vals[i]=i;
+      }
+      error = ex_put_var(exo->exoid,1,EX_ELEM_BLOCK,1,1,1,elem_vals);
+      EH(error, "ex_put_elem_var elem block");
+      free(elem_vals);
+      /* Create truth table at this time - saves mucho cycles later
+         Also malloc the gvec_elem final dim. Easier to do right
+         when the truth table is built. */
 
   /* -------------------- Nodal Variables -------------------------- */
   if ( rd->nnv > 0 )

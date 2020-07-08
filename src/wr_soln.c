@@ -51,6 +51,21 @@ write_solution(char output_file[], double resid_vector[], double x[], double **x
     step = (*nprint)+1;
     wr_nodal_result_exo(exo, output_file, gvec, i+1, step, time_value);
   }
+  exo->exoid = ex_open(output_file, exo->cmode, &exo->comp_wordsize,
+                       &exo->io_wordsize, &exo->version);
+  double *elem_vals = calloc(exo->num_elems, sizeof(double));
+  for(i=0;i<exo->num_elems;i++)
+  {
+      elem_vals[i]=i;
+  }
+  for(i=0;i<exo->num_elems;i++)
+  {
+      printf("%g \n",elem_vals[i]);
+  }
+  int error = ex_put_var(exo->exoid,1,EX_ELEM_BLOCK,1,1,exo->num_elems,elem_vals);
+  EH(error, "ex_put_elem_var elem block");
+  free(elem_vals);
+  ex_close(exo->exoid);
 
   /* Special case for global post processing, usually file output */
 #ifdef DEBUG
