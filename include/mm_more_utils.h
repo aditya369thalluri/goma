@@ -33,7 +33,7 @@ EXTERN int cnt_nodal_vars	/* mm_more_utils.c                           */
 (void );
 
 EXTERN int cnt_elem_vars	/* mm_more_utils.c                           */
-(void );
+(const Exo_DB *);
 
 EXTERN int goal_post_nodal	/* mm_more_utils.c                           */
 (const int );		/* var  */
@@ -99,7 +99,8 @@ EXTERN void extract_elem_vec	/* mm_more_utils.c                           */
        const int ,		/* ev_indx                                   */
        const int ,		/* var_no                                    */
        double ***,		/* gvec_elem                                 */
-       const Exo_DB * );	/* exo                                       */
+       const Exo_DB *,
+       const int dof);	        /* degrees of freedom                        */
 
 EXTERN void anneal_map		/* mm_more_utils.c                           */
 (const int ,		/* dim                                       */

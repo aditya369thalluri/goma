@@ -324,7 +324,7 @@ int do_loca (Comm_Ex *cx,  /* array of communications structures */
   DPRINTF(stderr, "cnt_nodal_vars() begins...\n");
 #endif
   tnv = cnt_nodal_vars();
-  tev = cnt_elem_vars();
+  tev = cnt_elem_vars(exo);
   
 #ifdef DEBUG
   DPRINTF(stderr, "Found %d total primitive nodal variables to output.\n", tnv);
