@@ -182,7 +182,8 @@ extern int rd_vectors_from_exoII /* rf_util.c                                */
 				 * The default value is INT_MAX, which       *
 				 * implies the last time plane in the        *
 				 * exodus file.                              */
-       double *timeValueRead); /* Value of the time in the time plane read  */
+       double *timeValueRead,   /* Value of the time in the time plane read  */
+       const Exo_DB *exo);      /* Exodus database                           */
 
 extern int rd_trans_vectors_from_exoII /* rf_util.c                          */
 (double [],		/* u - solution vector                       */
@@ -243,7 +244,7 @@ extern Strcpy_rtn strcpy_rtn;
 extern int
 rd_exoII_ev(double *u, int varType, int mn, MATRL_PROP_STRUCT *matrl, 
 	    char **var_names, int num_nodes, int num_vars, int exoII_id,
-	    int time_step, int spec);
+            int time_step, int spec, const Exo_DB *exo);
 
 #endif
 
