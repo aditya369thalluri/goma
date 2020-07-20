@@ -686,7 +686,7 @@ assign_species_name(const int kspec, struct Material_Properties *mp_ptr,
 void 
 assign_var_name(const int varType, const int idof, 
 		MATRL_PROP_STRUCT *mp_ptr,
-		char *species_name, char *species_desc, int matID)
+                char *species_name, char *species_desc, int matID)
 
     /**************************************************************************
      *
@@ -722,7 +722,8 @@ assign_var_name(const int varType, const int idof,
   }
   else if(matID!=-1 && pd_glob[matID]->i[pg->imtrx][varType] == I_P1)
   {
-
+    sprintf(species_name,  "%s_E%d", Var_Name[varType].name2,idof+1);
+    strcpy(species_desc, Var_Name[varType].name1);
   }
   else {
     strcpy(species_name, Var_Name[varType].name2);

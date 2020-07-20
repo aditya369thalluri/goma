@@ -2332,10 +2332,17 @@ rd_vectors_from_exoII(double u[], const char *file_nm, const int action_flag,
 			{
 	                  matrl = mp_glob[mn];
 			}
-                      if(mn!=-1 && (pd_glob[mn]->i[pg->imtrx][var] == I_P1 || pd_glob[mn]->i[pg->imtrx][var]==I_P0))
+                      if(mn!=-1 && (pd_glob[mn]->i[pg->imtrx][var] == I_P0))
                       {
                         error = rd_exoII_ev(u, var, mn, matrl, elem_var_names, exo->eb_num_elems[mn],
                                             num_elem_vars, exoid, time_step, 0, exo);
+                      }
+                      else if(mn!=-1 && (pd_glob[mn]->i[pg->imtrx][var] == I_P1)){
+                        int dof = getdofs(type2shape(exo->eb_elem_itype[mn]),I_P1);
+                        for(int i=0;i<dof;i++){
+                        error = rd_exoII_ev(u, var, mn, matrl, elem_var_names, exo->eb_num_elems[mn],
+                                            num_elem_vars, exoid, time_step, i, exo);
+                        }
                       }
                       else{
 		      error = rd_exoII_nv(u, var, mn, matrl, var_names, num_nodes,
@@ -2646,7 +2653,7 @@ rd_exoII_ev(double *u, int varType, int mn, MATRL_PROP_STRUCT *matrl,
   char exo_var_name[256], exo_var_desc[256];
   double *variable = NULL;
   assign_var_name(varType, spec, matrl, exo_var_name,
-		  exo_var_desc, mn);
+                  exo_var_desc, mn);
   for (i = 0; i < num_elem_vars; i++) {
     if (strcmp(elem_var_names[i], exo_var_name) == 0) {
       vdex = i + 1;
@@ -2659,7 +2666,7 @@ rd_exoII_ev(double *u, int varType, int mn, MATRL_PROP_STRUCT *matrl,
             exo_var_name,mn+1);
     error = ex_get_var(exoII_id, time_step, EX_ELEM_BLOCK, vdex, mn+1, num_elems_block, variable);
     EH(error, "ex_get_var element");
-    inject_elem_vec(u, varType, spec, 0, mn, variable,exo,num_elems_block);
+    inject_elem_vec(u, varType, 0, spec, mn, variable,exo,num_elems_block);
     safer_free((void **) &variable);
   }
   return status;
@@ -2998,7 +3005,7 @@ inject_elem_vec(double sol_vec[], const int varType, const int k,
         if (index != -1) {
           /* This should be the one node that has our value - set the element
              value to this */
-            sol_vec[index] = elem_vec[i];
+            sol_vec[index] = elem_vec[ielem-e_start];
         if (found_quantity == TRUE) {
             fprintf(stderr,
                     "Warning: Too many nodes returning quantities for element variable %s (%s) - may not be accurate\n",
